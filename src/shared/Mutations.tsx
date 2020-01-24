@@ -8,7 +8,7 @@ export const CREATE_LICENSE = gql`
   }
 `;
 
-export interface ICreateLicenseInput {
+export interface CreateLicenseInput {
   personId: number;
   certificateId: number;
   startDate: any;

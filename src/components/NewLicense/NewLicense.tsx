@@ -7,7 +7,7 @@ import { Formik, Field } from 'formik';
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { number, object, string, date } from 'yup';
-import { CREATE_LICENSE, ICreateLicenseInput } from '../../shared/Mutations';
+import { CREATE_LICENSE, CreateLicenseInput } from '../../shared/Mutations';
 import { PersonContext } from '../../shared/PersonContext';
 import { IListsQuery, LISTS } from '../../shared/Queries';
 import FormItem from '../ui/FormItem';
@@ -45,7 +45,7 @@ export function NewLicense(properties: any) {
   const [
     createLicense,
     { loading: mutationLoading, error: mutationError, data: mutationData },
-  ] = useMutation<{ createLicense: { NummerWeergave: string } }, { input: ICreateLicenseInput }>(
+  ] = useMutation<{ createLicense: { NummerWeergave: string } }, { input: CreateLicenseInput }>(
     CREATE_LICENSE,
   );
   if (loading || mutationLoading) {
@@ -128,7 +128,7 @@ export function NewLicense(properties: any) {
           if (!personId) {
             return;
           }
-          const input: ICreateLicenseInput = {
+          const input: CreateLicenseInput = {
             personId,
             certificateId: values.certificateId,
             startDate: values.startDate,

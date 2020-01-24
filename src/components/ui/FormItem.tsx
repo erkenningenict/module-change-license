@@ -34,7 +34,6 @@ class FormItem extends React.Component<FormItemProps, {}> {
   }
 
   private hasError(name?: string): boolean {
-    // console.log('#DH# hasError name: ', name, 'error: ', this.getError(name));
     return this.getError(name) !== undefined && this.getError(name) !== '';
   }
 
