@@ -4,7 +4,7 @@ import { FormikProps } from 'formik';
 import React from 'react';
 import FormItem from './FormItem';
 
-interface IFormCalendarProps {
+interface FormCalendarProps {
   id: string;
   label: string;
   name?: string;
@@ -18,7 +18,7 @@ interface IFormCalendarProps {
   formControlClassName?: string;
 }
 
-class FormCalendar extends React.Component<IFormCalendarProps, {}> {
+class FormCalendar extends React.Component<FormCalendarProps, {}> {
   public render() {
     const handleChange = (event: any) => {
       if (this.props.form && this.props.name) {

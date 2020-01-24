@@ -1,0 +1,52 @@
+{
+  "data": {
+    "Certificaten": [
+      { "CertificaatID": "1", "Naam": "Uitvoeren Gewasbescherming", "__typename": "Certificaat" },
+      {
+        "CertificaatID": "2",
+        "Naam": "Bedrijfsvoeren Gewasbescherming",
+        "__typename": "Certificaat"
+      },
+      {
+        "CertificaatID": "3",
+        "Naam": "Bedrijfsvoeren + Distribueren",
+        "__typename": "Certificaat"
+      },
+      { "CertificaatID": "4", "Naam": "Mollen en woelratten", "__typename": "Certificaat" },
+      {
+        "CertificaatID": "5",
+        "Naam": "Distribueren Bestrijdingsmiddelen",
+        "__typename": "Certificaat"
+      },
+      { "CertificaatID": "22", "Naam": "KBA", "__typename": "Certificaat" },
+      { "CertificaatID": "23", "Naam": "Uitvoeren gewasbesch. + KBA", "__typename": "Certificaat" },
+      {
+        "CertificaatID": "24",
+        "Naam": "Bedrijfsvoeren gewasbesch. + KBA",
+        "__typename": "Certificaat"
+      },
+      {
+        "CertificaatID": "25",
+        "Naam": "Bedrijfsvoeren + distribueren + KBA",
+        "__typename": "Certificaat"
+      },
+      { "CertificaatID": "26", "Naam": "KBA-GB", "__typename": "Certificaat" },
+      {
+        "CertificaatID": "27",
+        "Naam": "Uitvoeren gewasbesch. + KBA-GB",
+        "__typename": "Certificaat"
+      },
+      {
+        "CertificaatID": "28",
+        "Naam": "Bedrijfsvoeren gewasbesch. + KBA-GB",
+        "__typename": "Certificaat"
+      },
+      {
+        "CertificaatID": "29",
+        "Naam": "Bedrijfsvoeren + distribueren + KBA-GB",
+        "__typename": "Certificaat"
+      },
+      { "CertificaatID": "30", "Naam": "Adviseren Gewasbescherming", "__typename": "Certificaat" }
+    ]
+  }
+}

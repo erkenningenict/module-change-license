@@ -1,5 +1,6 @@
 import { useQuery } from '@apollo/react-hooks';
-import { Alert, Button, Panel, PanelBody, TableResponsive } from '@erkenningen/ui';
+import { Alert, Panel, PanelBody, TableResponsive } from '@erkenningen/ui';
+import { Icon, Button } from '@material-ui/core';
 import React, { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import { PersonContext } from '../../shared/PersonContext';
@@ -14,6 +15,15 @@ export default function Licenses(props: any) {
     variables: { personId },
     fetchPolicy: 'network-only',
   });
+  if (!personId) {
+    return (
+      <PanelBody key="2">
+        <Alert type="danger" key="1">
+          PersoonID is verplicht in de url.
+        </Alert>
+      </PanelBody>
+    );
+  }
   if (loading) {
     return <p>Gegevens worden geladen...</p>;
   }
@@ -63,12 +73,15 @@ export default function Licenses(props: any) {
           </table>
         </TableResponsive>
         <Button
-          label="Licentie toevoegen"
-          icon="pi pi-plus"
+          color="primary"
+          variant="contained"
           onClick={() => {
             history.push(`licenties/nieuw/${props.location.search}`);
           }}
-        />
+          startIcon={<Icon className="fa fa-plus" />}
+        >
+          Licentie toevoegen
+        </Button>
       </Panel>
     </>
   );

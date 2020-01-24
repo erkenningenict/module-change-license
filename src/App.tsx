@@ -1,5 +1,6 @@
 import { useQuery } from '@apollo/react-hooks';
 import { Alert } from '@erkenningen/ui';
+import { ThemeProvider } from '@material-ui/core/styles';
 import 'primeicons/primeicons.css';
 import 'primereact/resources/primereact.min.css';
 import 'primereact/resources/themes/nova-light/theme.css';
@@ -11,10 +12,25 @@ import { NewLicense } from './components/NewLicense/NewLicense';
 import { PersonContext } from './shared/PersonContext';
 import { GET_MY_ROLES_QUERY, IMy } from './shared/Queries';
 import UserRoute from './shared/UserRoute';
+import DateFnsUtils from '@date-io/date-fns';
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+import nlLocale from 'date-fns/locale/nl';
+import { format } from 'date-fns';
+import theme from './shared/MaterialTheme';
 
-export default function App() {
+class LocalizedUtils extends DateFnsUtils {
+  getDatePickerHeaderText(date): string {
+    return format(date, 'dd-MM-yyyy', { locale: this.locale });
+  }
+  dateFormat = 'dd-MM-yyyy';
+}
+
+export default function App(): JSX.Element | null {
   const [personId] = useQueryParam('personId', NumberParam);
   const { loading, error, data } = useQuery<IMy>(GET_MY_ROLES_QUERY);
+  if (!personId) {
+    return <Alert type="danger">PersoonID in de url is verplicht</Alert>;
+  }
   if (loading) {
     return <p>Gegevens worden geladen...</p>;
   }
@@ -44,18 +60,22 @@ export default function App() {
     );
   }
   if (!data || !data.my || data.my.Roles === null) {
-    return null;
+    return <Alert type="danger">U heeft niet de juiste rol voor deze actie.</Alert>;
   }
   if (data.my.Roles && data.my.Roles.indexOf('Rector') === -1) {
     return <Alert type="danger">U heeft niet de juiste rol voor deze actie.</Alert>;
   }
-  // PersonContext.
+
   return (
     <>
-      <PersonContext.Provider value={personId}>
-        <UserRoute path="/licenties" exact={true} component={Licenses} />
-        <UserRoute path="/licenties/nieuw" exact={true} component={NewLicense} />
-      </PersonContext.Provider>
+      <MuiPickersUtilsProvider utils={LocalizedUtils} locale={nlLocale}>
+        <ThemeProvider theme={theme}>
+          <PersonContext.Provider value={personId}>
+            <UserRoute path="/licenties" exact={true} component={Licenses} />
+            <UserRoute path="/licenties/nieuw" exact={true} component={NewLicense} />
+          </PersonContext.Provider>
+        </ThemeProvider>
+      </MuiPickersUtilsProvider>
     </>
   );
 }

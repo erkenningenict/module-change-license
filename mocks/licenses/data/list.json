@@ -1,0 +1,66 @@
+{
+  "data": {
+    "Certificeringen": [
+      {
+        "CertificeringID": "207548",
+        "Certificaat": {
+          "Code": "UG",
+          "Naam": "Uitvoeren Gewasbescherming",
+          "__typename": "Certificaat"
+        },
+        "NormVersieID": 10009,
+        "BeginDatum": 1261008000000,
+        "EindDatum": 1418774400000,
+        "Status": "Verlopen",
+        "DatumVoldaan": 1390262400000,
+        "Opmerkingen": "",
+        "NummerWeergave": "31.2010.0047839",
+        "__typename": "Certificering"
+      },
+      {
+        "CertificeringID": "273474",
+        "Certificaat": {
+          "Code": "UG",
+          "Naam": "Uitvoeren Gewasbescherming",
+          "__typename": "Certificaat"
+        },
+        "NormVersieID": 20002,
+        "BeginDatum": 1418774400000,
+        "EindDatum": 1576540800000,
+        "Status": "Geldig",
+        "DatumVoldaan": null,
+        "Opmerkingen": "",
+        "NummerWeergave": "31.2014.0000527",
+        "__typename": "Certificering"
+      },
+      {
+        "CertificeringID": "356368",
+        "Certificaat": {
+          "Code": "AG",
+          "Naam": "Adviseren Gewasbescherming",
+          "__typename": "Certificaat"
+        },
+        "NormVersieID": 20006,
+        "BeginDatum": 1579219200000,
+        "EindDatum": 1737072000000,
+        "Status": "Geldig",
+        "DatumVoldaan": null,
+        "Opmerkingen": "Test",
+        "NummerWeergave": "31.2020.0000110",
+        "__typename": "Certificering"
+      },
+      {
+        "CertificeringID": "356369",
+        "Certificaat": { "Code": "KBA", "Naam": "KBA", "__typename": "Certificaat" },
+        "NormVersieID": 20006,
+        "BeginDatum": 1579219200000,
+        "EindDatum": 1737072000000,
+        "Status": "Geldig",
+        "DatumVoldaan": null,
+        "Opmerkingen": "Test",
+        "NummerWeergave": "31.2020.0000111",
+        "__typename": "Certificering"
+      }
+    ]
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "expression": "/graphql",
+  "body": "(.*)getLists",
+  "method": "POST",
+  "name": "certificatesList",
+  "responses": {
+    "list": {
+      "default": true,
+      "status": 200,
+      "delay": 200,
+      "file": "mocks/certificates/data/list.json"
+    },
+    "500": {
+      "status": 500,
+      "delay": 200
+    }
+  }
+}

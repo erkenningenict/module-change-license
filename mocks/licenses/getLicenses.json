@@ -1,0 +1,18 @@
+{
+  "expression": "/graphql",
+  "body": "(.*)getCertificeringen\\(\\$personId(.*)",
+  "method": "POST",
+  "name": "licenseList",
+  "responses": {
+    "list": {
+      "default": true,
+      "status": 200,
+      "delay": 200,
+      "file": "mocks/licenses/data/list.json"
+    },
+    "500": {
+      "status": 500,
+      "delay": 200
+    }
+  }
+}

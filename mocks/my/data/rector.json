@@ -1,0 +1,15 @@
+{
+  "data": {
+    "my": {
+      "Roles": [
+        "Registered Users",
+        "Rector",
+        "Hoogleraar",
+        "Beoordelaar",
+        "Examinator",
+        "Agrarier"
+      ],
+      "__typename": "My"
+    }
+  }
+}

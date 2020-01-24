@@ -1,35 +1,38 @@
 import { useMutation, useQuery } from '@apollo/react-hooks';
-import { Alert, Button, Panel, PanelBody, Spinner } from '@erkenningen/ui';
-import { add, isBefore, isDate } from 'date-fns';
-import { Formik } from 'formik';
+import { Alert, Panel, PanelBody, Spinner } from '@erkenningen/ui';
+import { FormControl, Icon, TextField, MenuItem, Select } from '@material-ui/core';
+import Button from '@material-ui/core/Button';
+import { add, isValid } from 'date-fns';
+import { Formik, Field } from 'formik';
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { number, object, string } from 'yup';
+import { number, object, string, date } from 'yup';
 import { CREATE_LICENSE, ICreateLicenseInput } from '../../shared/Mutations';
 import { PersonContext } from '../../shared/PersonContext';
 import { IListsQuery, LISTS } from '../../shared/Queries';
-import FormCalendar from '../ui/FormCalendar';
-import FormSelect from '../ui/FormSelect';
-import FormText from '../ui/FormText';
+import FormItem from '../ui/FormItem';
+import { KeyboardDatePicker } from '@material-ui/pickers';
+
+const dateTransform = (curVal: any) => {
+  return isValid(new Date(curVal)) ? curVal : undefined;
+};
 
 const CreateLicenseSchema = object().shape({
   certificateId: number()
     .min(1, 'Kies een certificaat uit de lijst')
     .required('Kies een certificaat'),
-  startDate: string().required('Startdatum is verplicht'),
   remark: string().required('Toelichting is verplicht'),
-  endDate: string()
-    .required('Einddatum is verplicht')
-    .when('startDate', (startDate: string, schema: any) => {
-      const start = new Date(startDate);
-      return schema.test({
-        test: (endDate: string) => {
-          const end = new Date(endDate);
-          return isBefore(start, end);
-        },
-        message: 'Einddatum moet na startdatum liggen',
-      });
-    }),
+  startDate: date()
+    .transform(dateTransform)
+    .min(new Date(2015, 0, 1), 'Startdatum moet minimaal 1-1-2015 zijn')
+    .required('Startdatum is verplicht'),
+  endDate: date()
+    .transform(dateTransform)
+    .min(new Date(2015, 0, 1), 'Einddatum moet minimaal 1-1-2015 zijn')
+    .when('startDate', (startDate: Date, schema: any) => {
+      return startDate && schema.min(startDate, 'Einddatum moet na begindatum liggen');
+    })
+    .required('Einddatum is verplicht'),
 });
 
 export function NewLicense(properties: any) {
@@ -75,6 +78,33 @@ export function NewLicense(properties: any) {
   if (!data) {
     return null;
   }
+  const DatePickerField = ({ field, form, ...other }) => {
+    return (
+      <KeyboardDatePicker
+        name={field.name}
+        value={field.value}
+        format="dd-MM-yyyy"
+        cancelLabel="Annuleren"
+        showTodayButton={true}
+        todayLabel="Vandaag"
+        invalidDateMessage={null}
+        InputProps={{ disableUnderline: true }}
+        // if you are using custom validation schema you probably want to pass `true` as third argument
+        onChange={(date: any) => {
+          if (field.name === 'startDate' && date !== null) {
+            const over5Years = add(date, { years: 5 });
+            form.setFieldValue('endDate', over5Years, false);
+            // SetTimeout needed because would give end date invalid date error
+            setTimeout(() => {
+              form.setFieldError('endDate', undefined);
+            }, 1);
+          }
+          return form.setFieldValue(field.name, date, true);
+        }}
+        {...other}
+      />
+    );
+  };
   return (
     <Panel title="Licentie toevoegen">
       <PanelBody>
@@ -94,7 +124,7 @@ export function NewLicense(properties: any) {
           remark: '',
         }}
         validationSchema={CreateLicenseSchema}
-        onSubmit={(values, { setSubmitting }) => {
+        onSubmit={(values: any): void => {
           if (!personId) {
             return;
           }
@@ -108,52 +138,70 @@ export function NewLicense(properties: any) {
           };
           createLicense({ variables: { input } });
         }}
-        render={(props: any) => {
+        render={(props): React.ReactNode => {
           return (
-            <form onSubmit={props.handleSubmit} className="form form-horizontal">
-              <FormSelect
-                id="certificate"
+            <form onSubmit={props.handleSubmit} className="form form-horizontal" noValidate>
+              <FormItem
                 label="Certificaat"
-                options={data.Certificaten.sort((a: any, b: any) => (a.Naam > b.Naam ? 1 : -1)).map(
-                  (item: any) => ({
-                    value: parseInt(item.CertificaatID, 10),
-                    label: item.Naam,
-                  }),
-                )}
+                form={props}
                 name="certificateId"
-                loading={loading}
-                form={props}
-              />
-              <FormCalendar
-                id="startDate"
-                label="Begindatum"
-                form={props}
-                key="startDate"
-                name="startDate"
-                onChange={(e) => {
-                  if (e.value && isDate(e.value)) {
-                    const over5Years = add(e.value, { years: 5 });
-                    props.setFieldValue('endDate', over5Years);
-                  }
-                }}
-              />
-              <FormCalendar
-                id="endDate"
-                label="Einddatum"
-                form={props}
-                key="endDate"
-                name="endDate"
-              />
-              <FormText id="remark" label="Toelichting" form={props} name="remark" />
+                formControlClassName="col-md-3"
+              >
+                <FormControl fullWidth={true} hiddenLabel={true}>
+                  <Select
+                    autoWidth={true}
+                    name="certificateId"
+                    value={props.values.certificateId}
+                    onChange={props.handleChange}
+                    disableUnderline
+                    required
+                  >
+                    <MenuItem value={0} disabled>
+                      Certificaat
+                    </MenuItem>
+                    {data.Certificaten.sort((a: any, b: any) => (a.Naam > b.Naam ? 1 : -1)).map(
+                      (item: any) => (
+                        <MenuItem key={item.CertificaatID} value={parseInt(item.CertificaatID, 10)}>
+                          {item.Naam}
+                        </MenuItem>
+                      ),
+                    )}
+                  </Select>
+                </FormControl>
+              </FormItem>
+              <FormItem label="Startdatum" form={props} name="startDate">
+                <FormControl fullWidth={true} hiddenLabel={true}></FormControl>
+                <Field name="startDate" component={DatePickerField} />
+              </FormItem>
+              <FormItem label="Einddatum" form={props} name="endDate">
+                <FormControl fullWidth={true} hiddenLabel={true}></FormControl>
+                <Field name="endDate" component={DatePickerField} />
+              </FormItem>
+              <FormItem label="Toelichting" form={props} name="remark">
+                <FormControl fullWidth={true} hiddenLabel={true}>
+                  <TextField
+                    name="remark"
+                    onChange={props.handleChange}
+                    onBlur={props.handleBlur}
+                    value={props.values.remark}
+                    required
+                    InputProps={{ disableUnderline: true }}
+                    placeholder="Toelichting"
+                  />
+                </FormControl>
+              </FormItem>
               <div className="form-group">
                 <div className="col-md-offset-3 col-md-6">
                   <Button
-                    buttonType="submit"
-                    label="Licentie aanmaken"
-                    icon="pi pi-check"
+                    color="primary"
+                    type="submit"
+                    variant="contained"
+                    startIcon={<Icon className="fa fa-check" />}
                     disabled={props.isSubmitting}
-                  />
-                  {returnToListLink}
+                  >
+                    Licentie aanmaken
+                  </Button>
+                  <span style={{ marginLeft: '15px' }}>{returnToListLink}</span>
                 </div>
               </div>
             </form>

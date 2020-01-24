@@ -1,7 +1,7 @@
 import { FormikProps } from 'formik';
 import React from 'react';
 
-interface IFormItemProps {
+interface FormItemProps {
   label?: string;
   for?: string;
   name?: string;
@@ -11,7 +11,7 @@ interface IFormItemProps {
   helpText?: string;
 }
 
-class FormItem extends React.Component<IFormItemProps, {}> {
+class FormItem extends React.Component<FormItemProps, {}> {
   public render() {
     let labelClasses = this.props.labelClassNames || 'col-sm-4 col-md-3';
     labelClasses += ' control-label';
@@ -34,6 +34,7 @@ class FormItem extends React.Component<IFormItemProps, {}> {
   }
 
   private hasError(name?: string): boolean {
+    // console.log('#DH# hasError name: ', name, 'error: ', this.getError(name));
     return this.getError(name) !== undefined && this.getError(name) !== '';
   }
 
