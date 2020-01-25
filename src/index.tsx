@@ -1,6 +1,5 @@
 // Add IE11 support
-import 'core-js/es6/map';
-import 'core-js/es6/set';
+import 'core-js';
 import 'es6-shim';
 import 'react-app-polyfill/ie11';
 

@@ -11,6 +11,7 @@
     "@material-ui/pickers": "^3.2.9",
     "apollo-boost": "0.4.7",
     "apollo-link-schema": "1.2.4",
+    "core-js": "^3.6.4",
     "date-fns": "2.9.0",
     "es6-shim": "0.35.5",
     "formik": "2.1.2",
