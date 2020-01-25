@@ -145,7 +145,7 @@ export function NewLicense(properties: any) {
                 label="Certificaat"
                 form={props}
                 name="certificateId"
-                formControlClassName="col-md-3"
+                formControlClassName="col-md-5"
               >
                 <FormControl fullWidth={true} hiddenLabel={true}>
                   <Select
@@ -170,11 +170,11 @@ export function NewLicense(properties: any) {
                 </FormControl>
               </FormItem>
               <FormItem label="Startdatum" form={props} name="startDate">
-                <FormControl fullWidth={true} hiddenLabel={true}></FormControl>
+                <FormControl hiddenLabel={true}></FormControl>
                 <Field name="startDate" component={DatePickerField} />
               </FormItem>
               <FormItem label="Einddatum" form={props} name="endDate">
-                <FormControl fullWidth={true} hiddenLabel={true}></FormControl>
+                <FormControl hiddenLabel={true}></FormControl>
                 <Field name="endDate" component={DatePickerField} />
               </FormItem>
               <FormItem label="Toelichting" form={props} name="remark">
