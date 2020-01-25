@@ -145,7 +145,7 @@ export function NewLicense(properties: any) {
                 label="Certificaat"
                 form={props}
                 name="certificateId"
-                formControlClassName="col-md-5"
+                formControlClassName="col-sm-4 col-md-5"
               >
                 <FormControl fullWidth={true} hiddenLabel={true}>
                   <Select
