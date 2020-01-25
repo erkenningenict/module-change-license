@@ -17,9 +17,7 @@ import { QueryParamProvider } from 'use-query-params';
 import App from './App';
 
 const cache = new InMemoryCache();
-const apiUrl = process.env.REACT_APP_GRAPHQL_API_URL
-  ? process.env.REACT_APP_GRAPHQL_API_URL
-  : ERKENNINGEN_GRAPHQL_API_URL;
+const apiUrl = process.env.NODE_ENV === 'development' ? '/graphql' : ERKENNINGEN_GRAPHQL_API_URL;
 
 const client = new ApolloClient({
   link: new HttpLink({

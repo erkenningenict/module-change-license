@@ -12,6 +12,8 @@ Use `@erkenningen/config` to get the global configuration.
 
 Run `npm start` to start the React app locally (`http://localhost:3000`).
 
+By default, locally started has NODE_ENV = development (this is production on Netlify). Run the mockserver to redirect to an other endpoint (if needed).
+
 ### Cors
 
 Make sure you disable CORS add custom CORS response headers using a browser extension.
