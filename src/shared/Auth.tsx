@@ -1,7 +1,9 @@
 import React from 'react';
 
+// eslint-disable-next-line
 import { DeepPartial } from 'ts-essentials';
 
+// eslint-disable-next-line
 import { useGetMyQuery, My } from '../generated/graphql';
 
 export enum Roles {
