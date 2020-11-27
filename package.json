@@ -26,9 +26,7 @@
     "react-router-dom": "5.2.0",
     "use-query-params": "1.1.9",
     "ts-essentials": "7.0.1",
-    "yup": "0.31.0"
-  },
-  "devDependencies": {
+    "yup": "0.31.0",
     "@erkenningen/build": "1.0.7",
     "@fortawesome/fontawesome-free": "^5.15.1",
     "@reach/router": "1.2.1",
