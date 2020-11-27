@@ -1,5 +1,5 @@
-import { toDutchDate } from '@erkenningen/ui';
 import React from 'react';
+import { toDutchDate } from '@erkenningen/ui/utils';
 
 export function LicenseRow(props: any) {
   const { row } = props;

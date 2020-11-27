@@ -1,21 +1,23 @@
-import { useQuery } from '@apollo/react-hooks';
-import { Alert, Panel, PanelBody, TableResponsive } from '@erkenningen/ui';
-import { Icon, Button } from '@material-ui/core';
 import React, { useContext } from 'react';
+import { Alert } from '@erkenningen/ui/components/alert';
+import { Button } from '@erkenningen/ui/components/button';
+import { Panel, PanelBody } from '@erkenningen/ui/layout/panel';
+import { TableResponsive } from '@erkenningen/ui/layout/table';
 import { useHistory } from 'react-router-dom';
+import { useGetCertificeringenQuery } from '../../generated/graphql';
 import { PersonContext } from '../../shared/PersonContext';
-import { GET_LICENSES_QUERY } from '../../shared/Queries';
 import { LicenseRow } from './LicenseRow';
 
-export default function Licenses(props: any) {
+const Licenses: React.FC<any> = (props) => {
   const personId = useContext(PersonContext);
   const history = useHistory();
 
-  const { loading, error, data } = useQuery<any>(GET_LICENSES_QUERY, {
-    variables: { personId },
+  const { loading, error, data } = useGetCertificeringenQuery(
+    {variables: { personId: personId !== null && personId ? personId : 0 },
+    skip: !personId || personId === null,
     fetchPolicy: 'network-only',
   });
-  if (!personId) {
+  if (!personId || personId === null) {
     return (
       <PanelBody key="2">
         <Alert type="danger" key="1">
@@ -43,7 +45,7 @@ export default function Licenses(props: any) {
 
   return (
     <>
-      <Panel title="Licenties van persoon">
+      <Panel title="Licenties van persoon" doNotIncludeBody={true}>
         <TableResponsive>
           <table className="table table-striped" key="table">
             <thead>
@@ -58,11 +60,11 @@ export default function Licenses(props: any) {
               </tr>
             </thead>
             <tbody>
-              {data &&
-                data.Certificeringen.map((row) => (
+              {
+                data?.Certificeringen?.map((row) => (
                   <LicenseRow row={row} key={row.CertificeringID} />
                 ))}
-              {!data || data.Certificeringen.length === 0 ? (
+              {!data || data?.Certificeringen?.length === 0 ? (
                 <tr>
                   <td colSpan={3}>
                     <Alert type="info">Geen licenties gevonden.</Alert>
@@ -72,17 +74,20 @@ export default function Licenses(props: any) {
             </tbody>
           </table>
         </TableResponsive>
+        <PanelBody>
         <Button
-          color="primary"
-          variant="contained"
-          onClick={() => {
+          label="Licentie toevoegen"
+          className="mr-2"
+          icon="fa fa-check"
+          buttonType="submit"
+          onClick={(): void => {
             history.push(`licenties/nieuw/${props.location.search}`);
           }}
-          startIcon={<Icon className="fa fa-plus" />}
-        >
-          Licentie toevoegen
-        </Button>
+        />
+        </PanelBody>
       </Panel>
     </>
   );
-}
+};
+
+export default Licenses;

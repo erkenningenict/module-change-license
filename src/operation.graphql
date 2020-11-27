@@ -1,0 +1,35 @@
+query getMy {
+  my {
+    Roles
+  }
+}
+
+query getLists {
+  Certificaten {
+    CertificaatID
+    Naam
+  }
+}
+
+query getCertificeringen($personId: Int!) {
+  Certificeringen(personId: $personId) {
+    CertificeringID
+    Certificaat {
+      Code
+      Naam
+    }
+    NormVersieID
+    BeginDatum
+    EindDatum
+    Status
+    DatumVoldaan
+    Opmerkingen
+    NummerWeergave
+  }
+}
+
+mutation createLicense($input: createLicenseInput!) {
+  createLicense(input: $input) {
+    NummerWeergave
+  }
+}

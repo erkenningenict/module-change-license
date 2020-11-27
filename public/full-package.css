@@ -1084,7 +1084,7 @@ th {
   box-sizing: border-box; }
 
 html {
-  /* font-size: 10px; */
+  font-size: 10px;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0); }
 
 body {
@@ -6442,7 +6442,7 @@ h1 {
   margin-bottom: 2rem; }
 
 p {
-  font-size: 16px;
+  font-size: 18px;
   line-height: 1.5;
   margin-bottom: 20px;
   color: #000; }
