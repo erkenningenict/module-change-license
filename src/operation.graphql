@@ -25,11 +25,38 @@ query getCertificeringen($personId: Int!) {
     DatumVoldaan
     Opmerkingen
     NummerWeergave
+    CertificeringAantekeningen {
+      AantekeningCode
+    }
+    Passen {
+      PasID
+      DatumAanvraag
+      DatumUitgeleverd
+      Aantal
+      Status
+      BriefVerstuurd
+      Geadresseerde
+    }
   }
 }
 
 mutation createLicense($input: createLicenseInput!) {
   createLicense(input: $input) {
     NummerWeergave
+  }
+}
+
+mutation createPas($input: CreatePasInput!) {
+  createPas(input: $input) {
+    success
+    Pas {
+      PasID
+      DatumAanvraag
+      DatumUitgeleverd
+      Aantal
+      Status
+      BriefVerstuurd
+      Geadresseerde
+    }
   }
 }

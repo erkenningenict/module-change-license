@@ -1,19 +1,46 @@
 import React from 'react';
+
+import { FormatErrorParams } from 'yup';
+import * as yup from 'yup';
+
 import { ThemeContext } from '@erkenningen/ui';
 import { ERKENNINGEN_SITE_TYPE } from '@erkenningen/config';
 import { Alert } from '@erkenningen/ui/components/alert';
-import { NumberParam, useQueryParam } from 'use-query-params';
-import Licenses from './components/Licenses/Licenses';
-import { NewLicense } from './components/NewLicense/NewLicense';
-import { PersonContext } from './shared/PersonContext';
-import UserRoute from './shared/UserRoute';
 import { ThemeBureauErkenningen } from '@erkenningen/ui/layout/theme';
-import 'primeicons/primeicons.css';
-import 'primereact/resources/primereact.min.css';
+
 import { useAuth, Roles, hasOneOfRoles } from './shared/Auth';
 
-export default function App(): JSX.Element | null {
-  const [personId] = useQueryParam('personId', NumberParam);
+import Routes from './features/Routes';
+import { Route } from 'react-router-dom';
+
+// @TODO Move to lib?
+yup.setLocale({
+  mixed: {
+    default: 'Ongeldig',
+    required: 'Verplicht',
+    notType: (params: FormatErrorParams) => {
+      if (!params.value) {
+        return 'Verplicht';
+      }
+
+      switch (params.type) {
+        case 'number':
+          return 'Moet een getal zijn';
+        case 'date':
+          return 'Verplicht';
+        default:
+          return 'Ongeldige waarde';
+      }
+    },
+  },
+  string: {
+    email: 'Ongeldig e-mailadres',
+    min: 'Minimaal ${min} karakters', // eslint-disable-line no-template-curly-in-string
+    max: 'Maximaal ${max} karakters', // eslint-disable-line no-template-curly-in-string
+  },
+});
+
+const App: React.FC<{}> = (props) => {
   const auth = useAuth();
 
   if (auth.loading) {
@@ -37,20 +64,15 @@ export default function App(): JSX.Element | null {
     return <Alert type="danger">U heeft geen toegang tot deze module.</Alert>;
   }
 
-  if (!personId) {
-    return <Alert type="danger">PersoonID in de url is verplicht</Alert>;
-  }
-
   return (
     <>
       <ThemeContext.Provider value={{ mode: ERKENNINGEN_SITE_TYPE }}>
         <ThemeBureauErkenningen>
-          <PersonContext.Provider value={personId}>
-            <UserRoute path="/licenties" exact={true} component={Licenses} />
-            <UserRoute path="/licenties/nieuw" exact={true} component={NewLicense} />
-          </PersonContext.Provider>
+          <Route path="/:personId" component={Routes} />
         </ThemeBureauErkenningen>
       </ThemeContext.Provider>
     </>
   );
-}
+};
+
+export default App;

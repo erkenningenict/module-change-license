@@ -5,11 +5,11 @@ import { Button } from '@erkenningen/ui/components/button';
 import { Spinner } from '@erkenningen/ui/components/spinner';
 import { add, isValid } from 'date-fns';
 import { Formik } from 'formik';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { number, object, string, date } from 'yup';
-import { PersonContext } from '../../shared/PersonContext';
 import { FormCalendar, FormSelect, FormText } from '@erkenningen/ui/components/form';
 import { useCreateLicenseMutation, useGetListsQuery } from '../../generated/graphql';
+import { useStore } from '../../shared/Store';
 
 const dateTransform = (curVal: any) => {
   return isValid(new Date(curVal)) ? curVal : undefined;
@@ -33,20 +33,16 @@ const CreateLicenseSchema = object().shape({
     .required('Einddatum is verplicht'),
 });
 
-export function NewLicense(properties: any) {
-  const personId = useContext(PersonContext);
+const NewLicense: React.FC<{}> = (props) => {
+  const store = useStore();
   const { loading, data, error } = useGetListsQuery();
 
-  const search = (properties.location && properties.location && properties.location.search) || '';
-  const returnToListLink = <Link to={`/licenties${search}`}>Terug</Link>;
+  const returnToListLink = <Link to={`/${store.personId}/licenties`}>Terug</Link>;
 
   const [
     createLicense,
     { loading: mutationLoading, error: mutationError, data: mutationData },
-  ] = useCreateLicenseMutation({
-
-  }
-  );
+  ] = useCreateLicenseMutation({});
   if (loading || mutationLoading) {
     return (
       <div>
@@ -80,7 +76,7 @@ export function NewLicense(properties: any) {
   return (
     <Panel title="Licentie toevoegen">
       <PanelBody>
-        <p>U gaat nu een nieuwe licentie aanmaken voor persoon met PersoonID: {personId}.</p>
+        <p>U gaat nu een nieuwe licentie aanmaken voor persoon met PersoonID: {store.personId}.</p>
         <p>
           De licentie wordt aangemaakt per aangegeven datum en een pas wordt klaargezet voor
           verzending (met status betaald).
@@ -97,11 +93,11 @@ export function NewLicense(properties: any) {
         }}
         validationSchema={CreateLicenseSchema}
         onSubmit={(values: any): void => {
-          if (!personId) {
+          if (!store.personId) {
             return;
           }
           const input = {
-            personId,
+            personId: store.personId,
             certificateId: values.certificateId,
             startDate: values.startDate,
             endDate: values.endDate,
@@ -110,16 +106,16 @@ export function NewLicense(properties: any) {
           };
           createLicense({ variables: { input } });
         }}
-        >
-          {(props) => {
-
-        
-let certs = data?.Certificaten?.slice(0).sort((a, b) => a.Naam > b.Naam ? 1 : -1)?.map((item) => {
-  return {
-    value: item.CertificaatID,
-    label: item.Naam
-  }
-});
+      >
+        {(props) => {
+          let certs = data?.Certificaten?.slice(0)
+            .sort((a, b) => (a.Naam > b.Naam ? 1 : -1))
+            ?.map((item) => {
+              return {
+                value: item.CertificaatID,
+                label: item.Naam,
+              };
+            });
           return (
             <form onSubmit={props.handleSubmit} className="form form-horizontal" noValidate>
               <FormSelect
@@ -129,36 +125,27 @@ let certs = data?.Certificaten?.slice(0).sort((a, b) => a.Naam > b.Naam ? 1 : -1
                 labelClassNames="col-md-3"
                 formControlClassName="col-md-4"
                 options={certs || []}
-              >
-               
-              </FormSelect>
-                <FormCalendar
+              ></FormSelect>
+              <FormCalendar
                 label="Startdatum"
                 name="startDate"
                 form={props}
                 labelClassNames="col-md-3"
                 formControlClassName="col-md-4"
-                >
-
-                </FormCalendar>
-                <FormCalendar
+              ></FormCalendar>
+              <FormCalendar
                 label="Einddatum"
                 name="endDate"
                 form={props}
                 labelClassNames="col-md-3"
                 formControlClassName="col-md-4"
-                >
-
-                </FormCalendar>
-                <FormText
-               label="Toelichting"
-               name="remark"
-               onChange={props.handleChange}
-               value={props.values.remark}
-               
-                >
-
-                </FormText>
+              ></FormCalendar>
+              <FormText
+                label="Toelichting"
+                name="remark"
+                onChange={props.handleChange}
+                value={props.values.remark}
+              ></FormText>
               <div className="form-group">
                 <div className="col-md-offset-3 col-md-6">
                   <Button
@@ -173,8 +160,10 @@ let certs = data?.Certificaten?.slice(0).sort((a, b) => a.Naam > b.Naam ? 1 : -1
               </div>
             </form>
           );
-          }}
-          </Formik>
+        }}
+      </Formik>
     </Panel>
   );
-}
+};
+
+export default NewLicense;
