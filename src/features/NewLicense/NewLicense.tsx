@@ -106,7 +106,7 @@ const NewLicense: React.FC<{}> = (props) => {
         }}
       >
         {(props) => {
-          let certs = data?.Certificaten?.slice(0)
+          const certs = data?.Certificaten?.slice(0)
             .sort((a, b) => (a.Naam > b.Naam ? 1 : -1))
             ?.map((item) => {
               return {
