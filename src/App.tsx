@@ -41,7 +41,7 @@ yup.setLocale({
   },
 });
 
-const App: React.FC<any> = (props) => {
+const App: React.FC<{}> = (props) => {
   const auth = useAuth();
 
   if (auth.loading) {

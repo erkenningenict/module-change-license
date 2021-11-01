@@ -3,8 +3,7 @@ import { Alert } from '@erkenningen/ui/components/alert';
 import { Button } from '@erkenningen/ui/components/button';
 import { Panel, PanelBody } from '@erkenningen/ui/layout/panel';
 import { TableResponsive } from '@erkenningen/ui/layout/table';
-import { useHistory, useParams } from 'react-router-dom';
-import { useGetCertificeringenQuery } from '../../generated/graphql';
+import { useHistory } from 'react-router-dom';
 import { LicenseRow } from './LicenseRow';
 import { useStore } from '../../shared/Store';
 

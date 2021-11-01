@@ -1,9 +1,12 @@
 import { useGrowlContext } from '@erkenningen/ui/components/growl';
 
-export default function useToast() {
+export default function useToast(): {
+  showError: (summary: string, detail: string) => void;
+  showSuccess: (summary: string, detail?: string) => void;
+} {
   const { showGrowl } = useGrowlContext();
 
-  const showError = (summary: string, detail: string) => {
+  const showError = (summary: string, detail: string): void => {
     showGrowl({
       severity: 'error',
       summary,
@@ -12,7 +15,7 @@ export default function useToast() {
     });
   };
 
-  const showSuccess = (summary: string, detail?: string) => {
+  const showSuccess = (summary: string, detail?: string): void => {
     showGrowl({
       severity: 'success',
       summary,
