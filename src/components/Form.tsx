@@ -1,6 +1,8 @@
-import { Formik, FormikConfig, FormikProps, isFunction } from 'formik';
 import React from 'react';
+
 import * as yup from 'yup';
+import { Formik, FormikConfig, FormikProps, isFunction } from 'formik';
+import { FormikSchema } from '../shared/Schema';
 
 const schemaDefaults = (schema: FormikSchema<any>): any => {
   const result: any = {};
@@ -15,10 +17,6 @@ const schemaValidations = (schema: FormikSchema<any>): any => {
     result[key] = schema[key][1];
   });
   return yup.object(result);
-};
-
-export type FormikSchema<T> = {
-  [P in keyof T]: [T[P], yup.Schema<any>];
 };
 
 const Form: React.FC<
