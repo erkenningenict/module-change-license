@@ -11,6 +11,14 @@ query getLists {
   }
 }
 
+query getPersoon($personId: Int!) {
+  Persoon(PersoonID: $personId) {
+    PersoonID
+    Geboortedatum
+    FullName
+  }
+}
+
 query getCertificeringen($personId: Int!) {
   Certificeringen(personId: $personId) {
     CertificeringID

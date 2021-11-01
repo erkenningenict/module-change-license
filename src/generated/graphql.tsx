@@ -1704,6 +1704,7 @@ export type CreatePasInput = {
   amount?: Maybe<Scalars['Int']>;
   createInvoice?: Maybe<Scalars['Boolean']>;
   recipient?: Maybe<Scalars['SafeString']>;
+  remark?: Maybe<Scalars['SafeString']>;
 };
 
 export type CreatePasResult = {
@@ -2015,6 +2016,19 @@ export type GetListsQuery = (
   )>>> }
 );
 
+export type GetPersoonQueryVariables = Exact<{
+  personId: Scalars['Int'];
+}>;
+
+
+export type GetPersoonQuery = (
+  { __typename?: 'Query' }
+  & { Persoon?: Maybe<(
+    { __typename?: 'Persoon' }
+    & Pick<Persoon, 'PersoonID' | 'Geboortedatum' | 'FullName'>
+  )> }
+);
+
 export type GetCertificeringenQueryVariables = Exact<{
   personId: Scalars['Int'];
 }>;
@@ -2134,6 +2148,41 @@ export function useGetListsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<G
 export type GetListsQueryHookResult = ReturnType<typeof useGetListsQuery>;
 export type GetListsLazyQueryHookResult = ReturnType<typeof useGetListsLazyQuery>;
 export type GetListsQueryResult = Apollo.QueryResult<GetListsQuery, GetListsQueryVariables>;
+export const GetPersoonDocument = gql`
+    query getPersoon($personId: Int!) {
+  Persoon(PersoonID: $personId) {
+    PersoonID
+    Geboortedatum
+    FullName
+  }
+}
+    `;
+
+/**
+ * __useGetPersoonQuery__
+ *
+ * To run a query within a React component, call `useGetPersoonQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPersoonQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetPersoonQuery({
+ *   variables: {
+ *      personId: // value for 'personId'
+ *   },
+ * });
+ */
+export function useGetPersoonQuery(baseOptions: Apollo.QueryHookOptions<GetPersoonQuery, GetPersoonQueryVariables>) {
+        return Apollo.useQuery<GetPersoonQuery, GetPersoonQueryVariables>(GetPersoonDocument, baseOptions);
+      }
+export function useGetPersoonLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetPersoonQuery, GetPersoonQueryVariables>) {
+          return Apollo.useLazyQuery<GetPersoonQuery, GetPersoonQueryVariables>(GetPersoonDocument, baseOptions);
+        }
+export type GetPersoonQueryHookResult = ReturnType<typeof useGetPersoonQuery>;
+export type GetPersoonLazyQueryHookResult = ReturnType<typeof useGetPersoonLazyQuery>;
+export type GetPersoonQueryResult = Apollo.QueryResult<GetPersoonQuery, GetPersoonQueryVariables>;
 export const GetCertificeringenDocument = gql`
     query getCertificeringen($personId: Int!) {
   Certificeringen(personId: $personId) {

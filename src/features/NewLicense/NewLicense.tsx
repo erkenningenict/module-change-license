@@ -1,15 +1,19 @@
-import React, { useContext } from 'react';
+import React from 'react';
+
+import { add, isValid } from 'date-fns';
+import { Formik } from 'formik';
+import { Link, useHistory } from 'react-router-dom';
+import { number, object, string, date } from 'yup';
+
 import { Alert } from '@erkenningen/ui/components/alert';
 import { Panel, PanelBody } from '@erkenningen/ui/layout/panel';
 import { Button } from '@erkenningen/ui/components/button';
 import { Spinner } from '@erkenningen/ui/components/spinner';
-import { add, isValid } from 'date-fns';
-import { Formik } from 'formik';
-import { Link, useParams } from 'react-router-dom';
-import { number, object, string, date } from 'yup';
 import { FormCalendar, FormSelect, FormText } from '@erkenningen/ui/components/form';
+
 import { useCreateLicenseMutation, useGetListsQuery } from '../../generated/graphql';
 import { useStore } from '../../shared/Store';
+import useToast from '../../components/Toast';
 
 const dateTransform = (curVal: any) => {
   return isValid(new Date(curVal)) ? curVal : undefined;
@@ -35,14 +39,13 @@ const CreateLicenseSchema = object().shape({
 
 const NewLicense: React.FC<{}> = (props) => {
   const store = useStore();
+  const history = useHistory();
+  const { showSuccess, showError } = useToast();
   const { loading, data, error } = useGetListsQuery();
 
   const returnToListLink = <Link to={`/${store.personId}/licenties`}>Terug</Link>;
 
-  const [
-    createLicense,
-    { loading: mutationLoading, error: mutationError, data: mutationData },
-  ] = useCreateLicenseMutation({});
+  const [createLicense, { loading: mutationLoading }] = useCreateLicenseMutation({});
   if (loading || mutationLoading) {
     return (
       <div>
@@ -53,23 +56,7 @@ const NewLicense: React.FC<{}> = (props) => {
   if (error) {
     return <Alert type="danger">Fout bij ophalen lijsten...</Alert>;
   }
-  if (mutationError) {
-    return (
-      <PanelBody>
-        <Alert type="danger">Fout bij opslaan gegevens...</Alert>
-      </PanelBody>
-    );
-  }
-  if (mutationData && mutationData.createLicense.NummerWeergave) {
-    return (
-      <PanelBody>
-        <Alert type="success">
-          Licentie is aangemaakt met nummer: {mutationData.createLicense.NummerWeergave}.
-        </Alert>
-        {returnToListLink}
-      </PanelBody>
-    );
-  }
+
   if (!data) {
     return null;
   }
@@ -92,7 +79,7 @@ const NewLicense: React.FC<{}> = (props) => {
           remark: '',
         }}
         validationSchema={CreateLicenseSchema}
-        onSubmit={(values: any): void => {
+        onSubmit={async (values: any) => {
           if (!store.personId) {
             return;
           }
@@ -104,7 +91,18 @@ const NewLicense: React.FC<{}> = (props) => {
             isExtensionOf: values.isExtensionOf,
             remark: values.remark,
           };
-          createLicense({ variables: { input } });
+          const result = await createLicense({ variables: { input } });
+
+          if (result.data?.createLicense?.NummerWeergave?.length) {
+            showSuccess(
+              'Licentie toevoegen',
+              `Licentie is aangemaakt met nummer: ${result.data.createLicense.NummerWeergave}.`,
+            );
+            store.refresh();
+            history.push(`/${store.personId}/licenties`);
+          } else {
+            showError('Licentie toevoegen', 'Fout opgetreden bij toevoegen licentie');
+          }
         }}
       >
         {(props) => {

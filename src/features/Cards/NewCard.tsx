@@ -1,10 +1,9 @@
 import React from 'react';
 
 import { Link, useHistory, useParams } from 'react-router-dom';
-import { FormikHelpers, FormikProps } from 'formik';
+import { FormikProps } from 'formik';
 import * as yup from 'yup';
 
-import { useConfirm } from '@erkenningen/ui/components/confirm';
 import { Button } from '@erkenningen/ui/components/button';
 import { Panel, PanelBody } from '@erkenningen/ui/layout/panel';
 import { Spinner } from '@erkenningen/ui/components/spinner';
@@ -66,8 +65,9 @@ const NewCard: React.FC<{}> = (props) => {
             amount: [1, yup.number().required().min(1).max(10).integer()],
             createInvoice: [false, yup.bool()],
             recipient: ['', yup.string().notRequired()],
+            remark: ['', yup.string().notRequired()],
           }}
-          onSubmit={async (values, actions: FormikHelpers<any>) => {
+          onSubmit={async (values) => {
             const result = await createPas({
               variables: {
                 input: {
@@ -80,7 +80,11 @@ const NewCard: React.FC<{}> = (props) => {
               },
             });
             if (result.data?.createPas?.success) {
+              showSuccess('Pas aanmaken', 'Succesvol een pas aangemaakt');
+              store.refresh();
               history.push(`/${store.personId}/licenties/${licenseId}/passen`);
+            } else {
+              showError('Pas aanmaken mislukt', 'Pas aanmaken is mislukt, controleer uw invoer.');
             }
           }}
         >
@@ -96,6 +100,7 @@ const NewCard: React.FC<{}> = (props) => {
                   'Aangevinkt: pas wordt verstuurd als de klant heeft betaald. Niet aangevinkt: pas wordt direct verstuurd.'
                 }
               />
+              <FormText label="Opmerking" name="remark"></FormText>
               <div className="form-group">
                 <div className="col-md-offset-3 col-md-6">
                   <Button
@@ -104,6 +109,7 @@ const NewCard: React.FC<{}> = (props) => {
                     icon="fa fa-check"
                     buttonType="submit"
                     disabled={formikProps.isSubmitting}
+                    loading={formikProps.isSubmitting}
                   />
                   <span style={{ marginLeft: '15px' }}>
                     <Link to={`/${store.personId}/licenties/${licenseId}/passen`}>Terug</Link>

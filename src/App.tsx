@@ -3,7 +3,8 @@ import React from 'react';
 import { FormatErrorParams } from 'yup';
 import * as yup from 'yup';
 
-import { ThemeContext } from '@erkenningen/ui';
+import { GrowlProvider } from '@erkenningen/ui/components/growl';
+import { ThemeContext } from '@erkenningen/ui/layout/theme';
 import { ERKENNINGEN_SITE_TYPE } from '@erkenningen/config';
 import { Alert } from '@erkenningen/ui/components/alert';
 import { ThemeBureauErkenningen } from '@erkenningen/ui/layout/theme';
@@ -68,7 +69,9 @@ const App: React.FC<{}> = (props) => {
     <>
       <ThemeContext.Provider value={{ mode: ERKENNINGEN_SITE_TYPE }}>
         <ThemeBureauErkenningen>
-          <Route path="/:personId" component={Routes} />
+          <GrowlProvider>
+            <Route path="/:personId" component={Routes} />
+          </GrowlProvider>
         </ThemeBureauErkenningen>
       </ThemeContext.Provider>
     </>
