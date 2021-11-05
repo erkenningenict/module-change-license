@@ -15,17 +15,6 @@ import Form from '../../components/Form';
 import { FormCalendar, FormCheckbox, FormNumber, FormText } from '@erkenningen/ui/components/form';
 import { useCreatePasMutation } from '../../generated/graphql';
 
-/*
-
-DatumAanvraag
-Aantal
-Geadresseerde
-
-Factuur aanmaken ja/nee 
--> die bepaalt of status Betaald of UitTeLegeleverd is
-"Als de factuur wordt aangemaakt moet de klant eerst betalen voordat de pas wordt verzonden"
-*/
-
 const NewCard: React.FC<{}> = (props) => {
   const store = useStore();
   const history = useHistory();
@@ -64,7 +53,6 @@ const NewCard: React.FC<{}> = (props) => {
             requestDate: [new Date(), yup.date().required()],
             amount: [1, yup.number().required().min(1).max(10).integer()],
             createInvoice: [false, yup.bool()],
-            recipient: ['', yup.string().notRequired()],
             remark: ['', yup.string().notRequired()],
           }}
           onSubmit={async (values) => {
@@ -75,7 +63,6 @@ const NewCard: React.FC<{}> = (props) => {
                   requestDate: values.requestDate,
                   amount: parseInt(values.amount),
                   createInvoice: !!values.createInvoice,
-                  recipient: values.recipient,
                 },
               },
             });
@@ -91,7 +78,6 @@ const NewCard: React.FC<{}> = (props) => {
           {(formikProps: FormikProps<any>) => (
             <>
               <FormCalendar label="Aanvraagdatum" name="requestDate"></FormCalendar>
-              <FormText label="Geadresseerde" name="recipient"></FormText>
               <FormNumber label={'Aantal'} name={'amount'} />
               <FormCheckbox
                 label={'Factuur aanmaken'}
