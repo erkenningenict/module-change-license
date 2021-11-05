@@ -84,7 +84,6 @@ const Cards: React.FC<{}> = (props) => {
                 <Column field="Aantal" header={'Aantal'} />
                 <Column field="Status" header={'Status'} />
                 <Column field="BriefVerstuurd" header={'Brief verstuurd'} />
-                <Column field="Geadresseerde" header={'Geadresseerde'} />
               </DataTable>
             </Loader>
           </Panel>
