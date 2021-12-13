@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Link, useHistory, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { FormikProps } from 'formik';
 import * as yup from 'yup';
 
@@ -15,9 +15,9 @@ import Form from '../../components/Form';
 import { FormCalendar, FormCheckbox, FormNumber, FormText } from '@erkenningen/ui/components/form';
 import { useCreatePasMutation } from '../../generated/graphql';
 
-const NewCard: React.FC<{}> = (props) => {
+const NewCard: React.FC = () => {
   const store = useStore();
-  const history = useHistory();
+  const navigate = useNavigate();
   const { licenseId } = useParams<any>();
   const { showSuccess, showError } = useToast();
 
@@ -27,6 +27,14 @@ const NewCard: React.FC<{}> = (props) => {
     return (
       <Panel title="Licentie" className="form-horizontal">
         <Spinner text={'Gegevens laden...'} />
+      </Panel>
+    );
+  }
+
+  if (!licenseId) {
+    return (
+      <Panel title="Licentie" className="form-horizontal">
+        <Alert type="danger">Licentie niet gevonden</Alert>
       </Panel>
     );
   }
@@ -69,7 +77,7 @@ const NewCard: React.FC<{}> = (props) => {
             if (result.data?.createPas?.success) {
               showSuccess('Pas aanmaken', 'Succesvol een pas aangemaakt');
               store.refresh();
-              history.push(`/${store.personId}/licenties/${licenseId}/passen`);
+              navigate(`/${store.personId}/licenties/${licenseId}/passen`);
             } else {
               showError('Pas aanmaken mislukt', 'Pas aanmaken is mislukt, controleer uw invoer.');
             }
@@ -93,7 +101,7 @@ const NewCard: React.FC<{}> = (props) => {
                     label="Pas aanmaken"
                     className="mr-2"
                     icon="fa fa-check"
-                    buttonType="submit"
+                    type="submit"
                     disabled={formikProps.isSubmitting}
                     loading={formikProps.isSubmitting}
                   />

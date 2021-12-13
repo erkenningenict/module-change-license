@@ -11,8 +11,8 @@ import { ThemeBureauErkenningen } from '@erkenningen/ui/layout/theme';
 
 import { useAuth, Roles, hasOneOfRoles } from './shared/Auth';
 
-import Routes from './features/Routes';
-import { Route } from 'react-router-dom';
+import PersonRoutes from './features/PersonRoutes';
+import { Routes, Route } from 'react-router-dom';
 
 // @TODO Move to lib?
 yup.setLocale({
@@ -41,7 +41,7 @@ yup.setLocale({
   },
 });
 
-const App: React.FC<{}> = (props) => {
+const App: React.FC = () => {
   const auth = useAuth();
 
   if (auth.loading) {
@@ -70,7 +70,13 @@ const App: React.FC<{}> = (props) => {
       <ThemeContext.Provider value={{ mode: ERKENNINGEN_SITE_TYPE }}>
         <ThemeBureauErkenningen>
           <GrowlProvider>
-            <Route path="/:personId" component={Routes} />
+            <Routes>
+              <Route path="/:personId/*" element={<PersonRoutes />} />
+              <Route
+                path="*"
+                element={<Alert type="danger">PersoonID moet in de url staan.</Alert>}
+              />
+            </Routes>
           </GrowlProvider>
         </ThemeBureauErkenningen>
       </ThemeContext.Provider>

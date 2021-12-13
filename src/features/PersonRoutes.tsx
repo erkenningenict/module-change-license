@@ -1,7 +1,7 @@
 import { Alert } from '@erkenningen/ui/components/alert';
 import { PanelBody } from '@erkenningen/ui/layout/panel';
 import React, { useEffect } from 'react';
-import { Route, useParams } from 'react-router-dom';
+import { Route, Routes, useParams } from 'react-router-dom';
 import { useGetCertificeringenQuery, useGetPersoonQuery } from '../generated/graphql';
 import { useStore } from '../shared/Store';
 import Cards from './Cards/Cards';
@@ -10,18 +10,21 @@ import Licenses from './Licenses/Licenses';
 import NewLicense from './NewLicense/NewLicense';
 import PersonDetails from './Person/PersonDetails';
 
-const Routes: React.FC<{}> = (props) => {
-  const { personId } = useParams<any>();
+const PersonRoutes: React.FC = () => {
+  const params = useParams<any>();
   const store = useStore();
+  const { personId } = params;
 
   const { loading, error, data, refetch } = useGetCertificeringenQuery({
-    variables: { personId: +personId },
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    variables: { personId: +personId! },
     skip: !personId,
     fetchPolicy: 'network-only',
   });
 
   const { loading: personLoading, data: personData } = useGetPersoonQuery({
-    variables: { personId: +personId },
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    variables: { personId: +personId! },
     skip: !personId,
     fetchPolicy: 'network-only',
   });
@@ -39,7 +42,8 @@ const Routes: React.FC<{}> = (props) => {
 
   useEffect(() => {
     if (store.refreshTrigger) {
-      refetch({ personId: +personId });
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      refetch({ personId: +personId! });
 
       store.setStore({ refreshTrigger: false });
     }
@@ -63,12 +67,14 @@ const Routes: React.FC<{}> = (props) => {
   return (
     <>
       <PersonDetails />
-      <Route path="/:personId/licenties" exact={true} component={Licenses} />
-      <Route path="/:personId/licenties/nieuw" exact={true} component={NewLicense} />
-      <Route path="/:personId/licenties/:licenseId/passen" exact={true} component={Cards} />
-      <Route path="/:personId/licenties/:licenseId/passen/nieuw" exact={true} component={NewCard} />
+      <Routes>
+        <Route path="licenties" element={<Licenses />} />
+        <Route path="licenties/nieuw" element={<NewLicense />} />
+        <Route path="licenties/:licenseId/passen" element={<Cards />} />
+        <Route path="licenties/:licenseId/passen/nieuw" element={<NewCard />} />
+      </Routes>
     </>
   );
 };
 
-export default Routes;
+export default PersonRoutes;

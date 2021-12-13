@@ -4,7 +4,7 @@ import { Panel } from '@erkenningen/ui/layout/panel';
 import React from 'react';
 import { useStore } from '../../shared/Store';
 
-const PersonDetails: React.FC<{}> = (props) => {
+const PersonDetails: React.FC = () => {
   const store = useStore();
 
   if (!store.person) {
