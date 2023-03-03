@@ -3,12 +3,12 @@ import { Alert } from '@erkenningen/ui/components/alert';
 import { Button } from '@erkenningen/ui/components/button';
 import { Panel, PanelBody } from '@erkenningen/ui/layout/panel';
 import { TableResponsive } from '@erkenningen/ui/layout/table';
-import { useHistory } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import { LicenseRow } from './LicenseRow';
 import { useStore } from '../../shared/Store';
 
-const Licenses: React.FC<any> = (props) => {
-  const history = useHistory();
+const Licenses: React.FC = () => {
+  const navigate = useNavigate();
   const store = useStore();
 
   if (store.licensesLoading) {
@@ -50,12 +50,13 @@ const Licenses: React.FC<any> = (props) => {
             label="Licentie toevoegen"
             className="mr-2"
             icon="fa fa-check"
-            buttonType="submit"
+            type="button"
             onClick={(): void => {
-              history.push(`/${store.personId}/licenties/nieuw`);
+              navigate(`/${store.personId}/licenties/nieuw`);
             }}
           />
         </PanelBody>
+        <Outlet />
       </Panel>
     </>
   );

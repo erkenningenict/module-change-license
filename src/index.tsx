@@ -6,7 +6,7 @@ import { ApolloClient, ApolloProvider, HttpLink, InMemoryCache } from '@apollo/c
 
 import { ERKENNINGEN_GRAPHQL_API_URL } from '@erkenningen/config';
 
-import './index.scss';
+import './index.css';
 
 import App from './App';
 

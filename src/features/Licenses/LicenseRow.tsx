@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 
 import { toDutchDate } from '@erkenningen/ui/utils';
 import { Button } from '@erkenningen/ui/components/button';
@@ -8,7 +8,7 @@ import { useParams } from 'react-router-dom';
 
 export function LicenseRow(props: any) {
   const { personId } = useParams<any>();
-  const history = useHistory();
+  const navigate = useNavigate();
   const { row } = props;
 
   return (
@@ -19,7 +19,7 @@ export function LicenseRow(props: any) {
             label={''}
             icon="fas fa-id-card"
             onClick={() => {
-              history.push(`/${personId}/licenties/${row.CertificeringID}/passen`);
+              navigate(`/${personId}/licenties/${row.CertificeringID}/passen`);
             }}
             style={{ fontSize: '1rem' }}
             tooltip={'Pas details'}

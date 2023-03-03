@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { useHistory, useParams } from 'react-router-dom';
-import { Column } from 'primereact/components/column/Column';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Column } from 'primereact/column';
 
 import { Spinner } from '@erkenningen/ui/components/spinner';
 import { Panel } from '@erkenningen/ui/layout/panel';
@@ -16,9 +16,9 @@ import { LicenseCard } from '@erkenningen/ui/components/license-card';
 import Loader from '../../components/Loader';
 import { useStore } from '../../shared/Store';
 
-const Cards: React.FC<{}> = (props) => {
+const Cards: React.FC = () => {
   const store = useStore();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const { licenseId } = useParams<any>();
 
@@ -26,6 +26,14 @@ const Cards: React.FC<{}> = (props) => {
     return (
       <Panel title="Licentie" className="form-horizontal">
         <Spinner text={'Gegevens laden...'} />
+      </Panel>
+    );
+  }
+
+  if (!licenseId) {
+    return (
+      <Panel title="Licentie" className="form-horizontal">
+        <Alert type="danger">Licentie niet gevonden</Alert>
       </Panel>
     );
   }
@@ -42,16 +50,16 @@ const Cards: React.FC<{}> = (props) => {
 
   return (
     <>
-      <LicenseCard license={license} />
+      <LicenseCard license={license as any} />
       <Row className={'mb-1'}>
         <Col>
           <Button
             label="Pas aanmaken"
             className="mr-2"
             icon="fa fa-plus"
-            buttonType="submit"
+            type="submit"
             onClick={(): void => {
-              history.push(`/${store.personId}/licenties/${license.CertificeringID}/passen/nieuw`);
+              navigate(`/${store.personId}/licenties/${license.CertificeringID}/passen/nieuw`);
             }}
           />
         </Col>
@@ -91,8 +99,8 @@ const Cards: React.FC<{}> = (props) => {
       </Row>
       <Button
         label={'Terug naar overzicht'}
-        onClick={() => history.push(`/${store.personId}/licenties`)}
-        type={'light'}
+        onClick={() => navigate(`/${store.personId}/licenties`)}
+        buttonType={'light'}
       />
     </>
   );

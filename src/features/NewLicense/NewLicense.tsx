@@ -2,7 +2,7 @@ import React from 'react';
 
 import { add, isValid } from 'date-fns';
 import { Formik } from 'formik';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { number, object, string, date } from 'yup';
 
 import { Alert } from '@erkenningen/ui/components/alert';
@@ -37,9 +37,9 @@ const CreateLicenseSchema = object().shape({
     .required('Einddatum is verplicht'),
 });
 
-const NewLicense: React.FC<{}> = (props) => {
+const NewLicense: React.FC = () => {
   const store = useStore();
-  const history = useHistory();
+  const navigate = useNavigate();
   const { showSuccess, showError } = useToast();
   const { loading, data, error } = useGetListsQuery();
 
@@ -99,7 +99,7 @@ const NewLicense: React.FC<{}> = (props) => {
               `Licentie is aangemaakt met nummer: ${result.data.createLicense.NummerWeergave}.`,
             );
             store.refresh();
-            history.push(`/${store.personId}/licenties`);
+            navigate(`/${store.personId}/licenties`);
           } else {
             showError('Licentie toevoegen', 'Fout opgetreden bij toevoegen licentie');
           }
@@ -128,6 +128,7 @@ const NewLicense: React.FC<{}> = (props) => {
                 label="Startdatum"
                 name="startDate"
                 form={props}
+                style={{ width: '100%' }}
                 labelClassNames="col-md-3"
                 formControlClassName="col-md-4"
               ></FormCalendar>
@@ -135,6 +136,7 @@ const NewLicense: React.FC<{}> = (props) => {
                 label="Einddatum"
                 name="endDate"
                 form={props}
+                style={{ width: '100%' }}
                 labelClassNames="col-md-3"
                 formControlClassName="col-md-4"
               ></FormCalendar>
@@ -150,7 +152,7 @@ const NewLicense: React.FC<{}> = (props) => {
                     label="Licentie aanmaken"
                     className="mr-2"
                     icon="fa fa-check"
-                    buttonType="submit"
+                    type="submit"
                     disabled={props.isSubmitting}
                   />
                   <span style={{ marginLeft: '15px' }}>{returnToListLink}</span>
