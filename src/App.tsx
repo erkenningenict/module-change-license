@@ -74,7 +74,11 @@ const App: React.FC = () => {
               <Route path="/:personId/*" element={<PersonRoutes />} />
               <Route
                 path="*"
-                element={<Alert type="danger">PersoonID moet in de url staan.</Alert>}
+                element={
+                  <Alert type="danger">
+                    PersoonID moet in de url staan zoals `#/12345/licenties`.
+                  </Alert>
+                }
               />
             </Routes>
           </GrowlProvider>

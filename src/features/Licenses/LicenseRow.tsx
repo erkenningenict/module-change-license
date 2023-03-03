@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { useNavigate } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 
 import { toDutchDate } from '@erkenningen/ui/utils';
 import { Button } from '@erkenningen/ui/components/button';
